@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+
+  dolibarr-app:
+    image: euskalmoneta/dolibarr:custom
+    ports:
+      - 8080:80
+    volumes:
+      - ./data/documents:/var/www/documents
+      - ./etc/dolibarr/conf.php:/var/www/html/conf/conf.php
+      - ./etc/dolibarr/date-timezone.ini:/usr/local/etc/php/conf.d/date-timezone.ini
+    networks:
+      - buzuk_net
+
+  dolibarr-db:
+    image: mariadb:10.1
+    volumes:
+      - ./etc/dolibarr/dump:/docker-entrypoint-initdb.d
+      - ./data/mariadb:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=pass
+      - MYSQL_DATABASE=pass
+      - MYSQL_USER=pass
+      - MYSQL_PASSWORD=pass
+    networks:
+      - buzuk_net
+
+networks:
+  buzuk_net:
+    driver: bridge
